@@ -1,34 +1,38 @@
-﻿function validar(event) {
-  event.preventDefault(); // Evita el envío normal del formulario
+﻿// ======== VALIDACIÓN Y GUARDADO DE CONTACTO =========
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("formContacto");
+  if (!form) return;
 
-  let correo = document.getElementById("txtEmail").value.trim();
-  let telefono = document.getElementById("txtTelefono").value.trim();
-  let fecha = document.querySelector("input[type='date']").value;
-  const expresion = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
 
-  // Validar correo
-  if (!expresion.test(correo)) {
-    alert("El correo no es válido");
-    return false;
-  }
+    const correo = document.getElementById("txtEmail").value.trim();
+    const telefono = document.getElementById("txtTelefono").value.trim();
+    const fecha = document.getElementById("txtFecha").value.trim();
 
-  // Validar teléfono
-  if (telefono.length != 10 || isNaN(telefono)) {
-    alert("El teléfono no es correcto. Debe tener 10 dígitos numéricos.");
-    return false;
-  }
+    const expresion =
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-  // Guardar en LocalStorage
-  const contacto = {
-    email: correo,
-    telefono: telefono,
-    fecha: fecha
-  };
+    // === Validaciones ===
+    if (!expresion.test(correo)) {
+      alert("❌ El correo ingresado no es válido.");
+      return;
+    }
 
-  localStorage.setItem("contacto_usuario", JSON.stringify(contacto));
-  alert("✅ Datos de contacto guardados correctamente en el navegador.");
+    if (telefono.length !== 10 || isNaN(telefono)) {
+      alert("❌ El teléfono debe tener 10 dígitos numéricos.");
+      return;
+    }
 
-  // Redirigir a página de confirmación
-  window.location.href = "FormContactoEnviado.html";
-  return true;
-}
+    // === Guardar datos ===
+    const contacto = {
+      email: correo,
+      telefono: telefono,
+      fecha: fecha,
+    };
+    localStorage.setItem("contacto_usuario", JSON.stringify(contacto));
+
+    alert("✅ Datos de contacto guardados correctamente.");
+    window.location.href = "FormContactoEnviado.html";
+  });
+});
